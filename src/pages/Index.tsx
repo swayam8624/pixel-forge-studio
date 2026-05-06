@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { PageLayout } from "@/components/PageLayout";
 import { ArrowCTA } from "@/components/ArrowCTA";
 import { profile, skills, projects, book } from "@/data/site";
+import { skillIcons } from "@/data/icons";
 import model1 from "@/assets/model-1.jpg";
 import game1 from "@/assets/game-1.jpg";
 
