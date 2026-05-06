@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Quote, BookOpen, ShoppingCart, Send } from "lucide-react";
 import { PageLayout } from "@/components/PageLayout";
+import { BookScrollHero } from "@/components/BookScrollHero";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
