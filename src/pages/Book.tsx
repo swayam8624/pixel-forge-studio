@@ -23,33 +23,26 @@ const Book = () => {
 
   return (
     <PageLayout videoPage="book">
-      {/* Hero */}
-      <section className="container py-12 md:py-20">
-        <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
-          <div className="relative order-2 md:order-1">
-            <div className="absolute -inset-8 rounded-[3rem] opacity-50" style={{ background: "var(--gradient-radial-amber)" }} />
-            <img
-              src={book.cover}
-              alt={`${book.title} cover`}
-              className="relative rounded-2xl shadow-[var(--shadow-elevated)] w-full max-w-sm mx-auto border border-white/5"
-            />
-          </div>
-          <div className="order-1 md:order-2">
-            <p className="font-mono-tech text-xs uppercase tracking-widest text-amber">/ a novel</p>
-            <h1 className="font-display text-5xl md:text-6xl font-bold mt-3 leading-[0.95] text-balance">
-              {book.title}
-            </h1>
-            <p className="font-display text-xl text-muted-foreground mt-4 italic">"{book.subtitle}"</p>
-            <p className="text-sm text-muted-foreground mt-6 leading-relaxed">{book.description}</p>
-            <p className="font-mono-tech text-xs uppercase mt-6 text-muted-foreground">by {profile.name}</p>
-            <div className="flex flex-wrap gap-3 mt-8">
-              <Button asChild size="lg" className="bg-amber text-primary-foreground hover:opacity-90 rounded-full">
-                <a href={book.purchaseLinks[0].url}><ShoppingCart className="size-4" /> Buy Now</a>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="rounded-full border-white/15">
-                <a href="#quotes"><BookOpen className="size-4" /> Read Excerpt</a>
-              </Button>
-            </div>
+      {/* Scroll-driven 3D book hero */}
+      <BookScrollHero coverURL={book.cover} />
+
+      {/* Title block */}
+      <section className="container py-16 md:py-24">
+        <div className="max-w-3xl">
+          <p className="font-mono-tech text-xs uppercase tracking-widest text-amber">/ a novel</p>
+          <h1 className="font-display text-5xl md:text-7xl font-bold mt-3 leading-[0.95] text-balance">
+            {book.title}<span className="text-amber">.</span>
+          </h1>
+          <p className="font-display text-xl md:text-2xl text-muted-foreground mt-5 italic">"{book.subtitle}"</p>
+          <p className="text-foreground/85 mt-6 leading-relaxed max-w-2xl">{book.description}</p>
+          <p className="font-mono-tech text-xs uppercase mt-6 text-muted-foreground">by {profile.name}</p>
+          <div className="flex flex-wrap gap-3 mt-8">
+            <Button asChild size="lg" className="bg-amber text-primary-foreground hover:opacity-90 rounded-full">
+              <a href={book.purchaseLinks[0].url}><ShoppingCart className="size-4" /> Buy Now</a>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="rounded-full border-white/15">
+              <a href="#quotes"><BookOpen className="size-4" /> Read Excerpt</a>
+            </Button>
           </div>
         </div>
       </section>
