@@ -53,8 +53,27 @@ const Book = () => {
         </div>
       </section>
 
-      {/* Quotes */}
+      {/* Excerpt */}
       <section id="quotes" className="container py-12">
+        <div className="grid lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-4">
+            <p className="font-mono-tech text-xs uppercase tracking-widest text-amber">/ chapter one</p>
+            <h2 className="font-display text-3xl md:text-4xl font-bold mt-3 leading-tight">Sleeping Space</h2>
+            <p className="font-mono-tech text-xs text-muted-foreground mt-3">// 2 paragraphs · ~1 min read</p>
+          </div>
+          <article className="lg:col-span-8 bento-card p-8 md:p-10">
+            {book.excerpt.map((para, i) => (
+              <p key={i} className={cn("font-display text-lg leading-relaxed text-foreground/90", i > 0 && "mt-4")}>
+                {i === 0 ? <span className="float-left font-display text-6xl leading-none mr-3 mt-1 text-amber">{para[0]}</span> : null}
+                {i === 0 ? para.slice(1) : para}
+              </p>
+            ))}
+          </article>
+        </div>
+      </section>
+
+      {/* Quotes */}
+      <section className="container py-12">
         <h2 className="font-display text-3xl md:text-4xl font-bold">From The Pages</h2>
         <div className="grid md:grid-cols-3 gap-5 mt-8">
           {book.quotes.map((q, i) => (

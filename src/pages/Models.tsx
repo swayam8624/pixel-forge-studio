@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react";
-import { X, Download } from "lucide-react";
+import { X, Download, MessageCircle, ChevronDown } from "lucide-react";
 import { PageLayout } from "@/components/PageLayout";
 import { ModelViewer } from "@/components/ModelViewer";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { models, ModelEntry } from "@/data/site";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { models, ModelEntry, profile } from "@/data/site";
 import { cn } from "@/lib/utils";
 
 const categories = ["All", "Character", "Abstract", "Environment"] as const;
@@ -76,6 +77,20 @@ const Models = () => {
                     </span>
                   ))}
                 </div>
+                <div className="flex gap-2 mt-5" onClick={(e) => e.stopPropagation()}>
+                  <a
+                    href="#"
+                    className="inline-flex items-center gap-1.5 px-3 h-8 rounded-full bg-amber text-primary-foreground text-xs font-medium hover:opacity-90"
+                  >
+                    <Download className="size-3.5" /> Download
+                  </a>
+                  <a
+                    href={`mailto:${profile.email}?subject=Commission ${m.title}`}
+                    className="inline-flex items-center gap-1.5 px-3 h-8 rounded-full border border-white/15 text-xs font-medium hover:border-amber hover:text-amber transition-colors"
+                  >
+                    Commission Similar
+                  </a>
+                </div>
               </div>
             </button>
           ))}
@@ -99,12 +114,45 @@ const Models = () => {
               <div className="mt-4">
                 <ModelViewer geometry={active.geometry} />
               </div>
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mt-4">
+              <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mt-4">
                 <p className="text-sm text-muted-foreground max-w-2xl">{active.description}</p>
-                <Button className="bg-amber text-primary-foreground hover:opacity-90 rounded-full">
-                  <Download className="size-4" /> Download / Contact
-                </Button>
+                <div className="flex gap-2 flex-none">
+                  <Button className="bg-amber text-primary-foreground hover:opacity-90 rounded-full">
+                    <Download className="size-4" /> Download
+                  </Button>
+                  <Button asChild variant="outline" className="rounded-full border-white/15">
+                    <a href={`mailto:${profile.email}?subject=Commission ${active.title}`}>
+                      <MessageCircle className="size-4" /> Commission
+                    </a>
+                  </Button>
+                </div>
               </div>
+
+              {active.featured && (
+                <Collapsible className="mt-6 border-t border-white/5 pt-5">
+                  <CollapsibleTrigger className="group flex items-center justify-between w-full">
+                    <div className="text-left">
+                      <p className="font-mono-tech text-[10px] uppercase text-amber">Process writeup</p>
+                      <p className="font-display text-lg font-semibold mt-1">Wireframe → Sculpt → Retopo → PBR</p>
+                    </div>
+                    <ChevronDown className="size-5 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="mt-5 grid md:grid-cols-4 gap-4">
+                    {[
+                      { step: "01", title: "Wireframe", body: "Reference board in PureRef. Silhouette thumbnails. Lock proportions before any geometry." },
+                      { step: "02", title: "Sculpt", body: "Dyntopo block-out, then multiresolution for medium and fine forms. ~6 hours of pure shaping." },
+                      { step: "03", title: "Retopo", body: "Hand-retopo'd to ~24k tris. Quads only on deformation areas. UV unwrap with a single 4K atlas." },
+                      { step: "04", title: "PBR", body: "Substance Painter for base materials. Custom rim shader in GLSL for the real-time presentation pass." },
+                    ].map(s => (
+                      <div key={s.step} className="rounded-2xl border border-white/5 bg-background/40 p-4">
+                        <p className="font-mono-tech text-[10px] text-amber">{s.step}</p>
+                        <p className="font-display font-semibold mt-1">{s.title}</p>
+                        <p className="text-xs text-muted-foreground mt-2 leading-relaxed">{s.body}</p>
+                      </div>
+                    ))}
+                  </CollapsibleContent>
+                </Collapsible>
+              )}
             </>
           )}
         </DialogContent>
