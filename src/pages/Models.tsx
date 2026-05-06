@@ -1,10 +1,11 @@
 import { useState, useMemo } from "react";
-import { X, Download } from "lucide-react";
+import { X, Download, MessageCircle, ChevronDown } from "lucide-react";
 import { PageLayout } from "@/components/PageLayout";
 import { ModelViewer } from "@/components/ModelViewer";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { models, ModelEntry } from "@/data/site";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { models, ModelEntry, profile } from "@/data/site";
 import { cn } from "@/lib/utils";
 
 const categories = ["All", "Character", "Abstract", "Environment"] as const;
@@ -75,6 +76,20 @@ const Models = () => {
                       {t}
                     </span>
                   ))}
+                </div>
+                <div className="flex gap-2 mt-5" onClick={(e) => e.stopPropagation()}>
+                  <a
+                    href="#"
+                    className="inline-flex items-center gap-1.5 px-3 h-8 rounded-full bg-amber text-primary-foreground text-xs font-medium hover:opacity-90"
+                  >
+                    <Download className="size-3.5" /> Download
+                  </a>
+                  <a
+                    href={`mailto:${profile.email}?subject=Commission ${m.title}`}
+                    className="inline-flex items-center gap-1.5 px-3 h-8 rounded-full border border-white/15 text-xs font-medium hover:border-amber hover:text-amber transition-colors"
+                  >
+                    Commission Similar
+                  </a>
                 </div>
               </div>
             </button>
