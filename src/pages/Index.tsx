@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { PageLayout } from "@/components/PageLayout";
 import { ArrowCTA } from "@/components/ArrowCTA";
 import { profile, skills, projects, book } from "@/data/site";
+import { skillIcons, brandIcons } from "@/data/icons";
 import model1 from "@/assets/model-1.jpg";
 import game1 from "@/assets/game-1.jpg";
 
@@ -99,15 +100,18 @@ const Index = () => {
           {/* Icon links */}
           <article className="col-span-12 sm:col-span-6 lg:col-span-3 grid grid-cols-2 gap-4 md:gap-5 min-h-[280px]">
             {[
-              { icon: Github, href: profile.github, label: "GitHub" },
+              { icon: brandIcons.github, href: profile.github, label: "GitHub" },
               { icon: Mail, href: `mailto:${profile.email}`, label: "Email" },
-              { icon: Linkedin, href: profile.linkedin, label: "LinkedIn" },
+              { icon: brandIcons.linkedin, href: profile.linkedin, label: "LinkedIn" },
               { icon: FileText, href: profile.cv, label: "CV" },
-            ].map(t => (
-              <a key={t.label} href={t.href} aria-label={t.label} className="icon-tile h-full">
-                <t.icon className="size-7" strokeWidth={1.5} />
-              </a>
-            ))}
+            ].map((t, i) => {
+              const Icon = t.icon as React.ComponentType<{ className?: string }>;
+              return (
+                <a key={t.label} href={t.href} aria-label={t.label} className="icon-tile h-full">
+                  <Icon className="size-7" />
+                </a>
+              );
+            })}
           </article>
 
           {/* Latest 3D render */}
