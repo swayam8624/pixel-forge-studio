@@ -6,6 +6,7 @@
     "year": 2025,
     "abstract": "We trained a small transformer on 50K runs of an open-source roguelike to predict where players will go next. The model's attention maps cluster around procedural choke-points, suggesting level designers can audit difficulty by inspecting attention rather than playtesting.",
     "pdfURL": "/papers/latent-intent.pdf",
+    "doiUrl": "https://doi.org/10.1145/example.1",
     "citations": 7,
     "tags": ["ML", "Game AI", "HCI"]
   },
@@ -16,6 +17,7 @@
     "year": 2024,
     "abstract": "A user study (n=84) shows viewers cannot reliably distinguish a 6-tap PBR approximation from full Cook-Torrance below 90 fps thresholds — relevant for mobile and web rendering budgets.",
     "pdfURL": "/papers/cheap-pbr.pdf",
+    "doiUrl": "https://doi.org/10.1145/example.2",
     "citations": 12,
     "tags": ["Rendering", "Perception"]
   }

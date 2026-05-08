@@ -13,7 +13,7 @@ export const ArrowCTA = ({ to, ariaLabel = "Open", className }: Props) => (
     to={to}
     aria-label={ariaLabel}
     className={cn(
-      "group inline-flex items-center justify-center size-10 rounded-full border border-white/10 bg-card-elevated text-foreground hover:bg-amber hover:text-primary-foreground hover:border-transparent transition-all hover:-translate-y-0.5",
+      "group inline-flex items-center justify-center size-10 rounded-sm border border-white/10 bg-card-elevated text-foreground hover:bg-amber hover:text-primary-foreground hover:border-transparent transition-all hover:-translate-y-0.5",
       className
     )}
   >

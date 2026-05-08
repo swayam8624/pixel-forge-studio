@@ -1,5 +1,7 @@
 import { useState, useMemo } from "react";
 import { X, Download, MessageCircle, ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
+import { WarningTape } from "@/components/WarningTape";
 import { PageLayout } from "@/components/PageLayout";
 import { ModelViewer } from "@/components/ModelViewer";
 import { ContactModal } from "@/components/ContactModal";
@@ -10,6 +12,22 @@ import { models, ModelEntry, profile } from "@/data/site";
 import { cn } from "@/lib/utils";
 
 const categories = ["All", "Character", "Abstract", "Environment"] as const;
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const itemVariant = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
 
 const Models = () => {
   const [filter, setFilter] = useState<(typeof categories)[number]>("All");
@@ -22,14 +40,15 @@ const Models = () => {
 
   return (
     <PageLayout videoPage="models">
-      <section className="container py-12 md:py-20">
-        <div className="max-w-3xl">
-          <p className="font-mono-tech text-xs uppercase tracking-widest text-muted-foreground">/ models</p>
-          <h1 className="font-display text-5xl md:text-7xl font-bold mt-3 leading-[0.95]">
-            3D <span className="text-amber">Works.</span>
-          </h1>
-          <p className="font-mono-tech text-muted-foreground mt-4">// Rotate. Explore. Appreciate.</p>
-        </div>
+      <section className="container py-12 md:py-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="relative z-10 mb-8 md:mb-16 -mx-4 sm:mx-0"
+        >
+          <WarningTape text="3D SCULPTS" subtitle="Rotate. Explore. Appreciate." />
+        </motion.div>
 
         {/* Filters */}
         <div className="flex flex-wrap gap-2 mt-10">
@@ -50,9 +69,15 @@ const Models = () => {
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-8"
+        >
           {visible.map(m => (
-            <button
+            <motion.button
+              variants={itemVariant}
               key={m.id}
               onClick={() => setActive(m)}
               className="bento-card bento-card-hover text-left group"
@@ -80,23 +105,24 @@ const Models = () => {
                 </div>
                 <div className="flex flex-wrap gap-2 mt-5" onClick={(e) => e.stopPropagation()}>
                   <a
-                    href="#"
-                    className="inline-flex items-center gap-1.5 px-3 h-8 rounded-full bg-amber text-primary-foreground text-xs font-medium hover:opacity-90"
+                    href={m.objFile || "#"}
+                    download
+                    className="inline-flex items-center gap-1.5 px-3 h-8 rounded-sm bg-amber text-primary-foreground text-xs font-medium hover:opacity-90"
                   >
                     <Download className="size-3.5" /> Download
                   </a>
                   <ContactModal subject={`Commission Inquiry: Similar to ${m.title}`} title="Commission a 3D Model">
                     <button
-                      className="inline-flex items-center gap-1.5 px-3 h-8 rounded-full border border-white/15 text-xs font-medium hover:border-amber hover:text-amber transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 h-8 rounded-sm border border-white/15 text-xs font-medium hover:border-amber hover:text-amber transition-colors"
                     >
                       Commission Similar
                     </button>
                   </ContactModal>
                 </div>
               </div>
-            </button>
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       {/* Modal */}
@@ -119,8 +145,10 @@ const Models = () => {
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mt-4">
                 <p className="text-sm text-muted-foreground max-w-2xl">{active.description}</p>
                 <div className="flex flex-wrap gap-2 flex-none">
-                  <Button className="bg-amber text-primary-foreground hover:opacity-90 rounded-full">
-                    <Download className="size-4" /> Download
+                  <Button asChild className="bg-amber text-primary-foreground hover:opacity-90 rounded-full">
+                    <a href={active.objFile || "#"} download>
+                      <Download className="size-4 mr-2" /> Download
+                    </a>
                   </Button>
                   <ContactModal subject={`Commission Inquiry: ${active.title}`} title="Commission a 3D Model">
                     <Button variant="outline" className="rounded-full border-white/15">

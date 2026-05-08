@@ -13,6 +13,7 @@ const links = [
   { to: "/software", label: "Software" },
   { to: "/research", label: "Research" },
   { to: "/book", label: "Book" },
+  { to: "/resume", label: "Resume" },
 ];
 
 export const Navbar = () => {

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { X, Github, Copy, Check, Play, Terminal as TerminalIcon, ExternalLink } from "lucide-react";
+import { motion } from "framer-motion";
+import { WarningTape } from "@/components/WarningTape";
 import { PageLayout } from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -12,6 +14,22 @@ const statusBadge = {
   terminal: { dot: "bg-status-amber", label: "Launch in Terminal", color: "text-status-amber" },
   repo:     { dot: "bg-status-blue",  label: "View Repo", color: "text-status-blue" },
 } as const;
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const itemVariant = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
 
 const Games = () => {
   const [active, setActive] = useState<GameEntry | null>(null);
@@ -26,22 +44,22 @@ const Games = () => {
 
   return (
     <PageLayout videoPage="games">
-      <section className="container py-12 md:py-20">
-        <div className="max-w-3xl">
-          <p className="font-mono-tech text-xs uppercase tracking-widest text-status-green flex items-center gap-2">
-            <span className="size-2 rounded-full bg-status-green animate-pulse" /> system online
-          </p>
-          <h1 className="font-mono-tech text-5xl md:text-7xl font-bold mt-3 leading-[0.95] uppercase tracking-tight">
-            Game <span className="text-amber">Archive</span>
-          </h1>
-          <p className="font-mono-tech text-muted-foreground mt-4">{"> browser-playable games & launchable projects"}</p>
-        </div>
+      <section className="container py-12 md:py-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="relative z-10 mb-8 md:mb-16 -mx-4 sm:mx-0"
+        >
+          <WarningTape text="PLAYABLE WORLDS" subtitle="browser-playable games & launchable projects" />
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
+        <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
           {games.map(g => {
             const s = statusBadge[g.status];
             return (
-              <button
+              <motion.button
+                variants={itemVariant}
                 key={g.id}
                 onClick={() => setActive(g)}
                 className="bento-card bento-card-hover text-left group"
@@ -65,10 +83,10 @@ const Games = () => {
                     ))}
                   </div>
                 </div>
-              </button>
+              </motion.button>
             );
           })}
-        </div>
+        </motion.div>
       </section>
 
       <Dialog open={!!active} onOpenChange={(o) => !o && setActive(null)}>
@@ -94,10 +112,10 @@ const Games = () => {
                     <iframe src={active.playURL} title={active.title} className="w-full h-full" />
                   </div>
                   <div className="flex flex-wrap gap-2 mt-3">
-                    <Button asChild className="bg-amber text-primary-foreground rounded-full">
+                    <Button asChild className="bg-amber text-primary-foreground rounded-sm">
                       <a href={active.playURL} target="_blank" rel="noreferrer"><Play className="size-4" /> Open Full Screen</a>
                     </Button>
-                    <Button asChild variant="outline" className="rounded-full border-white/10">
+                    <Button asChild variant="outline" className="rounded-sm border-white/10">
                       <a href={active.repoURL} target="_blank" rel="noreferrer"><Github className="size-4" /> Source</a>
                     </Button>
                   </div>
@@ -140,10 +158,10 @@ const Games = () => {
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2 mt-3">
-                    <Button asChild className="bg-amber text-primary-foreground rounded-full">
+                    <Button asChild className="bg-amber text-primary-foreground rounded-sm">
                       <a href={active.repoURL} target="_blank" rel="noreferrer"><Github className="size-4" /> Open GitHub</a>
                     </Button>
-                    <Button asChild variant="outline" className="rounded-full border-white/10">
+                    <Button asChild variant="outline" className="rounded-sm border-white/10">
                       <a href={active.repoURL} target="_blank" rel="noreferrer"><ExternalLink className="size-4" /> Setup guide</a>
                     </Button>
                   </div>

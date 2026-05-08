@@ -88,7 +88,7 @@
   }
 
   .bento-card {
-    @apply relative rounded-3xl border border-white/5 bg-card overflow-hidden;
+    @apply relative rounded-xl border border-white/5 bg-card overflow-hidden;
     background-image: var(--gradient-card);
     box-shadow: var(--shadow-card);
     transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
@@ -100,7 +100,7 @@
   }
 
   .icon-tile {
-    @apply relative flex items-center justify-center rounded-2xl border border-white/5 bg-card-elevated aspect-square;
+    @apply relative flex items-center justify-center rounded-lg border border-white/5 bg-card-elevated aspect-square;
     transition: all var(--transition-base);
   }
   .icon-tile:hover {

@@ -1,6 +1,7 @@
+import { useState, useEffect } from "react";
 import { Github, Linkedin, Mail, FileText, ArrowRight, Download, MessageCircle, Quote, Phone, Terminal } from "lucide-react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { PageLayout } from "@/components/PageLayout";
 import { ArrowCTA } from "@/components/ArrowCTA";
 import { ContactModal } from "@/components/ContactModal";
@@ -13,11 +14,38 @@ import GithubHeatmap from "@/components/GithubHeatmap";
 
 const Index = () => {
   const isFirstLoad = !sessionStorage.getItem("preloader_played");
-  const delayOffset = isFirstLoad ? 2.8 : 0;
+  const [animationsReady, setAnimationsReady] = useState(!isFirstLoad);
+  const [projectIndex, setProjectIndex] = useState(0);
+
+  useEffect(() => {
+    if (!animationsReady) return;
+    const interval = setInterval(() => {
+      setProjectIndex((prev) => (prev + 2 >= projects.length ? 0 : prev + 2));
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [animationsReady]);
+
+  const visibleProjects = projects.slice(projectIndex, projectIndex + 2);
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariant = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  };
 
   return (
     <PageLayout videoPage="home">
-      <Preloader />
+      <Preloader onComplete={() => setAnimationsReady(true)} />
       {/* HERO */}
       <section className="container pt-10 md:pt-16 pb-6 relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-amber/20 blur-[120px] rounded-full pointer-events-none -z-10" />
@@ -43,9 +71,9 @@ const Index = () => {
         
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: delayOffset }}
-          className="flex flex-wrap items-center gap-3 mb-6"
+          animate={animationsReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5, delay: 0 }}
+          className="relative z-20 flex flex-wrap items-center gap-3 mb-8 md:mb-12"
         >
           <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-status-green/30 bg-status-green/5 backdrop-blur-md">
             <span className="size-2 rounded-full bg-status-green animate-pulse shadow-[0_0_8px_var(--status-green)]" />
@@ -56,44 +84,35 @@ const Index = () => {
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: delayOffset + 0.1 }}
-          className="my-8 md:my-12 -mx-4 sm:mx-0"
+          animate={animationsReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="relative z-10 my-16 md:my-20 -mx-4 sm:mx-0"
         >
-          <WarningTape text={profile.headline} />
+          <WarningTape text={profile.headline} subtitle={profile.headlineSub} />
         </motion.div>
-        
-        <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: delayOffset + 0.2 }}
-          className="font-display text-2xl md:text-3xl text-muted-foreground mt-4 italic"
-        >
-          {profile.headlineSub}
-        </motion.p>
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: delayOffset + 0.3 }}
-          className="flex flex-col sm:flex-row flex-wrap gap-4 mt-10"
+          animate={animationsReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="relative z-20 flex flex-col sm:flex-row flex-wrap gap-4 mt-10 md:mt-16"
         >
           <Link
             to="/models"
-            className="group w-full sm:w-auto inline-flex justify-center items-center gap-2 px-8 h-12 rounded-full bg-gradient-to-r from-amber to-orange-500 text-primary-foreground font-medium hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(251,191,36,0.3)]"
+            className="group w-full sm:w-auto inline-flex justify-center items-center gap-2 px-8 h-12 rounded-sm bg-gradient-to-r from-amber to-orange-500 text-primary-foreground font-medium hover:opacity-90 transition-opacity shadow-[0_0_20px_rgba(251,191,36,0.3)]"
           >
             See My Work <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
           </Link>
           <ContactModal subject="Portfolio Inquiry (Let's Talk)">
             <button
-              className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-8 h-12 rounded-full border border-white/15 hover:border-amber hover:text-amber hover:bg-amber/5 transition-colors backdrop-blur-sm"
+              className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-8 h-12 rounded-sm border border-white/15 hover:border-amber hover:text-amber hover:bg-amber/5 transition-colors backdrop-blur-sm"
             >
               <MessageCircle className="size-4" /> Let's Talk
             </button>
           </ContactModal>
           <a
             href={profile.cv}
-            className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-8 h-12 rounded-full border border-white/15 hover:border-foreground hover:bg-white/5 transition-colors backdrop-blur-sm"
+            className="inline-flex w-full sm:w-auto justify-center items-center gap-2 px-8 h-12 rounded-sm border border-white/15 hover:border-foreground hover:bg-white/5 transition-colors backdrop-blur-sm"
           >
             <Download className="size-4" /> Download CV
           </a>
@@ -101,30 +120,30 @@ const Index = () => {
       </section>
 
       {/* BENTO */}
-      <motion.section 
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: delayOffset + 0.4 }}
-        className="container py-8 md:py-12"
-      >
-        <div className="grid grid-cols-12 gap-4 md:gap-5">
+      <section className="container py-8 md:py-12">
+        <motion.div 
+          initial="hidden"
+          animate={animationsReady ? "visible" : "hidden"}
+          variants={staggerContainer}
+          className="grid grid-cols-12 gap-4 md:gap-5"
+        >
           {/* Tagline panel */}
-          <article className="bento-card grain col-span-12 lg:col-span-5 p-7 md:p-10 flex items-center min-h-[280px] relative overflow-hidden">
+          <motion.article variants={itemVariant} className="bento-card grain col-span-12 lg:col-span-5 p-7 md:p-10 flex items-center min-h-[280px] relative overflow-hidden">
             <div className="absolute inset-0 pointer-events-none" style={{ background: "var(--gradient-radial-amber)" }} />
             <h2 className="relative font-display text-3xl md:text-5xl font-bold leading-[1.05] text-balance">
               Building <span className="text-amber">Worlds.</span><br />
               Writing <span className="text-amber">Stories.</span><br />
               Shipping <span className="text-amber">Code.</span>
             </h2>
-          </article>
+          </motion.article>
 
           {/* GitHub heatmap */}
-          <article className="bento-card bento-card-hover col-span-12 sm:col-span-6 lg:col-span-4 p-7 flex flex-col justify-between min-h-[280px]">
+          <motion.article variants={itemVariant} className="bento-card bento-card-hover col-span-12 sm:col-span-6 lg:col-span-4 p-7 flex flex-col justify-between min-h-[280px]">
             <GithubHeatmap username={profile.github.split("/").pop() || "swayamsingal"} profileUrl={profile.github} />
-          </article>
+          </motion.article>
 
           {/* Icon links */}
-          <article className="col-span-12 sm:col-span-6 lg:col-span-3 grid grid-cols-2 gap-4 md:gap-5 min-h-[280px]">
+          <motion.article variants={itemVariant} className="col-span-12 sm:col-span-6 lg:col-span-3 grid grid-cols-2 gap-4 md:gap-5 min-h-[280px]">
             {[
               { icon: brandIcons.github, href: profile.github, label: "GitHub" },
               { icon: Mail, href: `mailto:${profile.email}`, label: "Email" },
@@ -140,48 +159,58 @@ const Index = () => {
                 </a>
               );
             })}
-          </article>
+          </motion.article>
 
           {/* Latest 3D render */}
-          <Link to="/models" className="bento-card bento-card-hover col-span-12 lg:col-span-4 min-h-[300px] relative overflow-hidden block group">
-            <img src={models[0]?.thumbnail} alt="Latest Blender render" loading="lazy" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-            <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
-            <div className="absolute top-5 left-5">
-              <span className="font-mono-tech text-[10px] uppercase px-2 py-1 rounded-full bg-background/80 backdrop-blur border border-white/10">
-                Latest render · #04
-              </span>
-            </div>
-            <div className="relative mt-auto p-7 flex items-end justify-between h-full">
-              <div className="self-end">
-                <p className="font-mono-tech text-xs text-muted-foreground uppercase">Sculpt</p>
-                <h3 className="font-display text-2xl font-semibold mt-1">{models[0]?.title}</h3>
+          <motion.div variants={itemVariant} className="col-span-12 lg:col-span-4 block">
+            <Link to="/models" className="bento-card bento-card-hover h-full min-h-[300px] relative overflow-hidden block group">
+              <img src={models[0]?.thumbnail} alt="Latest Blender render" loading="lazy" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+              <div className="absolute top-5 left-5">
+                <span className="font-mono-tech text-[10px] uppercase px-2 py-1 rounded-full bg-background/80 backdrop-blur border border-white/10">
+                  Latest render · #04
+                </span>
               </div>
-              <ArrowCTA to="/models" ariaLabel="See 3D work" />
-            </div>
-          </Link>
+              <div className="relative mt-auto p-7 flex items-end justify-between h-full">
+                <div className="self-end">
+                  <p className="font-mono-tech text-xs text-muted-foreground uppercase">Sculpt</p>
+                  <h3 className="font-display text-2xl font-semibold mt-1">{models[0]?.title}</h3>
+                </div>
+                <div className="inline-flex items-center justify-center size-10 rounded-sm border border-white/10 bg-card-elevated text-foreground group-hover:bg-amber group-hover:text-primary-foreground group-hover:border-transparent transition-all">
+                  <ArrowRight className="size-4 -rotate-45 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </div>
+              </div>
+            </Link>
+          </motion.div>
 
           {/* Latest game */}
-          <Link to="/games" className="bento-card bento-card-hover col-span-12 sm:col-span-6 lg:col-span-4 min-h-[300px] relative overflow-hidden block group">
-            <img src={games[0]?.thumbnail} alt="Latest game screenshot" loading="lazy" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-            <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
-            <div className="absolute top-5 left-5 flex items-center gap-2 px-3 py-1 rounded-full bg-background/80 backdrop-blur border border-status-green/30">
-              <span className="size-1.5 rounded-full bg-status-green animate-pulse" />
-              <span className="font-mono-tech text-[10px] uppercase text-status-green">Playable now</span>
-            </div>
-            <div className="relative mt-auto p-7 flex items-end justify-between h-full">
-              <div className="self-end">
-                <p className="font-mono-tech text-xs text-muted-foreground uppercase">Game</p>
-                <h3 className="font-display text-2xl font-semibold mt-1">{games[0]?.title}</h3>
+          <motion.div variants={itemVariant} className="col-span-12 sm:col-span-6 lg:col-span-4 block">
+            <Link to="/games" className="bento-card bento-card-hover h-full min-h-[300px] relative overflow-hidden block group">
+              <img src={games[0]?.thumbnail} alt="Latest game screenshot" loading="lazy" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
+              <div className="absolute top-5 left-5 flex items-center gap-2 px-3 py-1 rounded-full bg-background/80 backdrop-blur border border-status-green/30">
+                <span className="size-1.5 rounded-full bg-status-green animate-pulse" />
+                <span className="font-mono-tech text-[10px] uppercase text-status-green">Playable now</span>
               </div>
-              <ArrowCTA to="/games" ariaLabel="Play games" />
-            </div>
-          </Link>
+              <div className="relative mt-auto p-7 flex items-end justify-between h-full">
+                <div className="self-end">
+                  <p className="font-mono-tech text-xs text-muted-foreground uppercase">Game</p>
+                  <h3 className="font-display text-2xl font-semibold mt-1">{games[0]?.title}</h3>
+                </div>
+                <div className="inline-flex items-center justify-center size-10 rounded-sm border border-white/10 bg-card-elevated text-foreground group-hover:bg-amber group-hover:text-primary-foreground group-hover:border-transparent transition-all">
+                  <ArrowRight className="size-4 -rotate-45 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </div>
+              </div>
+            </Link>
+          </motion.div>
 
           {/* Book quote */}
-          <VerticalQuoteWheel quotes={book.quotes} bookTitle={book.title} />
+          <motion.div variants={itemVariant} className="col-span-12 sm:col-span-6 lg:col-span-4 block">
+            <VerticalQuoteWheel quotes={book.quotes} bookTitle={book.title} />
+          </motion.div>
 
           {/* Skills */}
-          <article className="bento-card bento-card-hover col-span-12 lg:col-span-5 p-7 flex flex-col justify-between min-h-[260px]">
+          <motion.article variants={itemVariant} className="bento-card bento-card-hover col-span-12 lg:col-span-5 p-7 flex flex-col justify-between min-h-[260px]">
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
               {skills.map(s => {
                 const matchedKey = Object.keys(skillIcons).find(k => k.toLowerCase() === s.toLowerCase());
@@ -207,10 +236,10 @@ const Index = () => {
               </div>
               <ArrowCTA to="/software" ariaLabel="See tools in action" />
             </div>
-          </article>
+          </motion.article>
 
           {/* Projects marquee */}
-          <article className="bento-card bento-card-hover col-span-12 lg:col-span-7 p-7 flex flex-col justify-between min-h-[260px] overflow-hidden">
+          <motion.article variants={itemVariant} className="bento-card bento-card-hover col-span-12 lg:col-span-7 p-7 flex flex-col justify-between min-h-[260px] overflow-hidden">
             <div className="-mx-7 overflow-hidden">
               <div className="flex gap-12 animate-marquee whitespace-nowrap font-display text-5xl font-bold text-white/[0.04]">
                 {Array.from({ length: 6 }).map((_, i) => (
@@ -218,12 +247,26 @@ const Index = () => {
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3 -mt-6">
-              {projects.map(p => (
-                <div key={p.id} className="rounded-xl overflow-hidden border border-white/5 aspect-video bg-card-elevated">
-                  <img src={p.thumb} alt={p.title} loading="lazy" className="w-full h-full object-cover" />
-                </div>
-              ))}
+            <div className="grid grid-cols-2 gap-3 -mt-6 h-28 sm:h-32 lg:h-40 relative">
+              <AnimatePresence mode="popLayout">
+                {visibleProjects.map(p => (
+                  <motion.div 
+                    key={p.id} 
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.5 }}
+                    className="relative rounded-xl overflow-hidden border border-white/5 aspect-video bg-card-elevated group"
+                  >
+                    <img src={p.thumb} alt={p.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+                    
+                    {/* Glass blur overlay with text */}
+                    <div className="absolute inset-0 bg-background/60 backdrop-blur-md flex items-center justify-center transition-all duration-500 group-hover:bg-background/0 group-hover:backdrop-blur-none">
+                      <h4 className="font-display text-sm md:text-lg font-semibold text-center px-4 transition-opacity duration-500 group-hover:opacity-0">{p.title}</h4>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
             <div className="flex items-end justify-between mt-5">
               <div>
@@ -232,9 +275,26 @@ const Index = () => {
               </div>
               <ArrowCTA to="/software" ariaLabel="See projects" />
             </div>
-          </article>
+          </motion.article>
+        </motion.div>
+      </section>
+
+      {/* Bottom Marquee */}
+      <section className="w-full overflow-hidden border-y border-white/5 bg-[#050505] py-6 mt-8 md:mt-12">
+        <div className="flex whitespace-nowrap">
+          <motion.div
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ repeat: Infinity, duration: 40, ease: "linear" }}
+            className="flex gap-16 font-display font-bold text-5xl md:text-7xl text-primary/10 uppercase tracking-tighter items-center"
+          >
+            {Array.from({ length: 8 }).map((_, i) => (
+              <span key={i} className="flex items-center gap-16">
+                CREATIVE DEVELOPER <span className="text-amber/30 text-4xl">✦</span> 3D ARTIST <span className="text-amber/30 text-4xl">✦</span> TECHNICAL WRITER <span className="text-amber/30 text-4xl">✦</span>
+              </span>
+            ))}
+          </motion.div>
         </div>
-      </motion.section>
+      </section>
     </PageLayout>
   );
 };

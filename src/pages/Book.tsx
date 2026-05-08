@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Quote, BookOpen, ShoppingCart, Send } from "lucide-react";
+import { motion } from "framer-motion";
+import { WarningTape } from "@/components/WarningTape";
 import { PageLayout } from "@/components/PageLayout";
 import { BookScrollHero } from "@/components/BookScrollHero";
 import { HorizontalQuoteWheel } from "@/components/HorizontalQuoteWheel";
@@ -10,6 +12,22 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { book, profile } from "@/data/site";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const itemVariant = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
 
 const Book = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -44,24 +62,28 @@ const Book = () => {
       <BookScrollHero coverURL={book.cover} />
 
       {/* Title block */}
-      <section className="container py-16 md:py-24">
-        <div className="max-w-3xl">
-          <p className="font-mono-tech text-xs uppercase tracking-widest text-amber">/ a novel</p>
-          <h1 className="font-display text-5xl md:text-7xl font-bold mt-3 leading-[0.95] text-balance">
-            {book.title}<span className="text-amber">.</span>
-          </h1>
+      <section className="container py-16 md:py-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="relative z-10 mb-8 md:mb-16 -mx-4 sm:mx-0"
+        >
+          <WarningTape text="PUBLICATIONS" subtitle={`${book.title} — a novel`} />
+        </motion.div>
+        <motion.div initial="hidden" animate="visible" variants={staggerContainer} className="max-w-3xl">
           <p className="font-display text-xl md:text-2xl text-muted-foreground mt-5 italic">"{book.subtitle}"</p>
           <p className="text-foreground/85 mt-6 leading-relaxed max-w-2xl">{book.description}</p>
           <p className="font-mono-tech text-xs uppercase mt-6 text-muted-foreground">by {profile.name}</p>
           <div className="flex flex-wrap gap-3 mt-8">
-            <Button asChild size="lg" className="bg-amber text-primary-foreground hover:opacity-90 rounded-full">
+            <Button asChild size="lg" className="bg-amber text-primary-foreground hover:opacity-90 rounded-sm">
               <a href={book.purchaseLinks[0].url}><ShoppingCart className="size-4" /> Buy Now</a>
             </Button>
-            <Button asChild size="lg" variant="outline" className="rounded-full border-white/15">
+            <Button asChild size="lg" variant="outline" className="rounded-sm border-white/15">
               <a href="#quotes"><BookOpen className="size-4" /> Read Excerpt</a>
             </Button>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Excerpt */}
@@ -111,7 +133,7 @@ const Book = () => {
                 <p className="font-display text-2xl font-semibold mt-1">{p.store}</p>
               </div>
               <span className={cn(
-                "px-4 py-2 rounded-full text-sm font-medium",
+                "px-4 py-2 rounded-sm text-sm font-medium",
                 p.primary ? "bg-amber text-primary-foreground" : "border border-white/10"
               )}>
                 Buy →
@@ -148,7 +170,7 @@ const Book = () => {
             <Input required name="name" placeholder="Your name" className="bg-card-elevated border-white/10 h-12" />
             <Input required type="email" name="email" placeholder="Your email" className="bg-card-elevated border-white/10 h-12" />
             <Textarea required name="question" placeholder="Your question..." rows={4} className="bg-card-elevated border-white/10" />
-            <Button type="submit" size="lg" className="bg-amber text-primary-foreground rounded-full w-full md:w-auto">
+            <Button type="submit" size="lg" className="bg-amber text-primary-foreground rounded-sm w-full md:w-auto">
               <Send className="size-4" /> {submitted ? "Sent — thanks!" : "Send Question"}
             </Button>
           </form>

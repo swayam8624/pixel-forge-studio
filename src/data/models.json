@@ -7,6 +7,7 @@
     "thumbnail": "/assets/model-1.jpg",
     "category": "Character",
     "geometry": "bust",
+    "objFile": "/assets/model-01.obj",
     "featured": true
   },
   {
@@ -16,7 +17,8 @@
     "tags": ["Blender", "Abstract", "Procedural"],
     "thumbnail": "/assets/model-2.jpg",
     "category": "Abstract",
-    "geometry": "torus"
+    "geometry": "torus",
+    "objFile": "/assets/model-02.obj"
   },
   {
     "id": "03",
@@ -25,6 +27,7 @@
     "tags": ["Blender", "Environment", "Diorama"],
     "thumbnail": "/assets/model-3.jpg",
     "category": "Environment",
-    "geometry": "ruins"
+    "geometry": "ruins",
+    "objFile": "/assets/model-03.obj"
   }
 ]

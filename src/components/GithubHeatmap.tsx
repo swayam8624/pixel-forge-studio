@@ -1,6 +1,6 @@
 import { Github, ArrowRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 interface GithubHeatmapProps {
   username: string;
@@ -18,6 +18,8 @@ const fetchGithubEvents = async (username: string) => {
 const heatLevel = ["bg-white/[0.04]", "bg-primary/20", "bg-primary/40", "bg-primary/70", "bg-primary"];
 
 export default function GithubHeatmap({ username, profileUrl }: GithubHeatmapProps) {
+  const [showFullYear, setShowFullYear] = useState(false);
+
   const { data: events, isLoading, isError } = useQuery({
     queryKey: ["github-events", username],
     queryFn: () => fetchGithubEvents(username),
@@ -27,6 +29,7 @@ export default function GithubHeatmap({ username, profileUrl }: GithubHeatmapPro
   const { heatmap, totalCommits } = useMemo(() => {
     const map: number[] = [];
     let totalCommits = 0;
+    const daysToShow = showFullYear ? 364 : 84;
 
     if (events && events.contributions) {
       totalCommits = events.totalContributions || 0;
@@ -36,9 +39,9 @@ export default function GithubHeatmap({ username, profileUrl }: GithubHeatmapPro
         week.forEach((day: any) => flatDays.push(day));
       });
       
-      const last84 = flatDays.slice(-84);
+      const lastDays = flatDays.slice(-daysToShow);
       
-      last84.forEach((day: any) => {
+      lastDays.forEach((day: any) => {
         const count = day.contributionCount;
         let level = 0;
         if (count > 0) {
@@ -50,18 +53,24 @@ export default function GithubHeatmap({ username, profileUrl }: GithubHeatmapPro
         map.push(level);
       });
     } else {
-      for (let i = 0; i < 84; i++) map.push(0);
+      for (let i = 0; i < daysToShow; i++) map.push(0);
     }
 
     return { heatmap: map, totalCommits };
-  }, [events]);
+  }, [events, showFullYear]);
 
   return (
     <>
-      <div>
+      <div 
+        className="cursor-pointer group/heatmap" 
+        onClick={() => setShowFullYear(!showFullYear)}
+        title="Click to toggle full year view"
+      >
         <div className="flex items-center justify-between">
-          <p className="font-mono-tech text-xs text-muted-foreground uppercase">// commit graph · 12w</p>
-          <Github className="size-4 text-muted-foreground" />
+          <p className="font-mono-tech text-xs text-muted-foreground uppercase transition-colors group-hover/heatmap:text-amber">
+            // commit graph · {showFullYear ? "1y" : "12w"}
+          </p>
+          <Github className="size-4 text-muted-foreground group-hover/heatmap:text-amber transition-colors" />
         </div>
         
         {isLoading ? (
@@ -73,10 +82,12 @@ export default function GithubHeatmap({ username, profileUrl }: GithubHeatmapPro
             <span className="font-mono-tech text-[10px] text-red-400">Failed to load Github data.</span>
           </div>
         ) : (
-          <div className="grid grid-flow-col grid-rows-7 gap-1 mt-5">
-            {heatmap.map((lvl, i) => (
-              <span key={i} className={`size-3 rounded-[2px] transition-colors duration-500 hover:scale-125 ${heatLevel[lvl]}`} />
-            ))}
+          <div className="mt-5 overflow-x-auto scrollbar-hide pb-2 -mb-2">
+            <div className="grid grid-flow-col grid-rows-7 gap-1 min-w-max">
+              {heatmap.map((lvl, i) => (
+                <span key={i} className={`size-3 rounded-[2px] transition-colors duration-500 hover:scale-125 ${heatLevel[lvl]}`} />
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -92,7 +103,7 @@ export default function GithubHeatmap({ username, profileUrl }: GithubHeatmapPro
             </>
           )}
         </div>
-        <a href={profileUrl} target="_blank" rel="noreferrer" aria-label="GitHub" className="inline-flex size-10 items-center justify-center rounded-full border border-white/10 hover:border-amber hover:text-amber transition-colors hover:bg-amber/5">
+        <a href={profileUrl} target="_blank" rel="noreferrer" aria-label="GitHub" onClick={(e) => e.stopPropagation()} className="inline-flex size-10 items-center justify-center rounded-full border border-white/10 hover:border-amber hover:text-amber transition-colors hover:bg-amber/5 z-10 relative">
           <ArrowRight className="size-4 -rotate-45 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </a>
       </div>

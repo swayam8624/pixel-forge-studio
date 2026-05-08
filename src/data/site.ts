@@ -32,9 +32,11 @@ export interface ResearchEntry {
   year: number;
   abstract: string;
   pdfURL: string;
+  doiUrl?: string;
   citations?: number;
   tags: string[];
 }
+
 
 export const research: ResearchEntry[] = researchData;
 

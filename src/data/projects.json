@@ -1,4 +1,6 @@
 [
   { "id": "p1", "title": "Lumen Studio", "thumb": "/assets/project-1.jpg" },
-  { "id": "p2", "title": "Forge Dashboard", "thumb": "/assets/project-2.jpg" }
+  { "id": "p2", "title": "Forge Dashboard", "thumb": "/assets/project-2.jpg" },
+  { "id": "p3", "title": "Nexus Engine", "thumb": "/assets/project-3.jpg" },
+  { "id": "p4", "title": "Echo Analytics", "thumb": "/assets/project-4.jpg" }
 ]
