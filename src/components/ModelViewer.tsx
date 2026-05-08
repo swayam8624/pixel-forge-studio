@@ -1,15 +1,18 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
+
 interface Props {
   geometry: "bust" | "torus" | "ruins";
+  objFile?: string;
 }
 
 /**
  * Lightweight Three.js viewer with procedural placeholder geometry.
  * Drop in real OBJ loading later by swapping the geometry block.
  */
-export const ModelViewer = ({ geometry }: Props) => {
+    export const ModelViewer = ({ geometry, objFile }: Props) => {
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -40,7 +43,36 @@ export const ModelViewer = ({ geometry }: Props) => {
     const group = new THREE.Group();
     const mat = new THREE.MeshStandardMaterial({ color: 0x444444, metalness: 0.4, roughness: 0.4 });
 
-    if (geometry === "bust") {
+    if (objFile) {
+      const loader = new OBJLoader();
+      loader.load(
+        objFile,
+        (obj) => {
+          // Center and scale the loaded object to fit nicely
+          const box = new THREE.Box3().setFromObject(obj);
+          const center = box.getCenter(new THREE.Vector3());
+          const size = box.getSize(new THREE.Vector3()).length();
+          
+          obj.position.sub(center);
+          
+          const scale = 2.0 / size; // target size of ~2 units
+          obj.scale.set(scale, scale, scale);
+
+          // Apply our standard material to all meshes inside the OBJ
+          obj.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+              child.material = mat;
+            }
+          });
+          
+          group.add(obj);
+        },
+        undefined,
+        (error) => {
+          console.error("Error loading OBJ file:", error);
+        }
+      );
+    } else if (geometry === "bust") {
       const head = new THREE.Mesh(new THREE.IcosahedronGeometry(0.9, 1), mat);
       head.position.y = 0.5;
       const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.4, 0.6, 8), mat);

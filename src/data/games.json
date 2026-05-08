@@ -1,0 +1,42 @@
+[
+  {
+    "id": "g1",
+    "title": "Drift Protocol",
+    "genre": "Puzzle / Atmospheric",
+    "description": "A minimalist isometric puzzle about routing light through ruined machines.",
+    "thumbnail": "/assets/game-1.jpg",
+    "status": "playable",
+    "launchType": "browser",
+    "playURL": "https://example.com/drift",
+    "repoURL": "https://github.com/example/drift",
+    "tags": ["TypeScript", "WebGL", "Browser"]
+  },
+  {
+    "id": "g2",
+    "title": "Hollow Run",
+    "genre": "Roguelike / Terminal",
+    "description": "ASCII roguelike with procedural caverns. Permadeath. Fits in your terminal.",
+    "thumbnail": "/assets/game-2.jpg",
+    "status": "terminal",
+    "launchType": "terminal",
+    "repoURL": "https://github.com/example/hollow-run",
+    "runInstructions": [
+      "git clone https://github.com/example/hollow-run",
+      "cd hollow-run",
+      "python main.py"
+    ],
+    "tags": ["Python", "Terminal", "Roguelike"]
+  },
+  {
+    "id": "g3",
+    "title": "Ember Climb",
+    "genre": "Pixel Platformer",
+    "description": "A short, tense pixel platformer about climbing toward a moon that keeps moving.",
+    "thumbnail": "/assets/game-3.jpg",
+    "status": "repo",
+    "launchType": "repo",
+    "repoURL": "https://github.com/example/ember-climb",
+    "runInstructions": ["git clone https://github.com/example/ember-climb", "npm install", "npm start"],
+    "tags": ["Pygame", "Pixel Art", "Platformer"]
+  }
+]

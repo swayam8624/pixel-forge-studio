@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Quote, BookOpen, ShoppingCart, Send } from "lucide-react";
 import { PageLayout } from "@/components/PageLayout";
 import { BookScrollHero } from "@/components/BookScrollHero";
+import { HorizontalQuoteWheel } from "@/components/HorizontalQuoteWheel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,12 +14,28 @@ import { cn } from "@/lib/utils";
 const Book = () => {
   const [submitted, setSubmitted] = useState(false);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
-    toast.success("Question received — I'll reply to your inbox.");
-    (e.target as HTMLFormElement).reset();
-    setTimeout(() => setSubmitted(false), 4000);
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+
+    try {
+      await fetch(`https://formsubmit.co/ajax/${profile.email}`, {
+        method: "POST",
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(Object.fromEntries(formData))
+      });
+      setSubmitted(true);
+      toast.success("Question received — I'll reply to your inbox.");
+      form.reset();
+      setTimeout(() => setSubmitted(false), 4000);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to send message. Please try again.");
+    }
   };
 
   return (
@@ -69,16 +86,8 @@ const Book = () => {
       {/* Quotes */}
       <section className="container py-12">
         <h2 className="font-display text-3xl md:text-4xl font-bold">From The Pages</h2>
-        <div className="grid md:grid-cols-3 gap-5 mt-8">
-          {book.quotes.map((q, i) => (
-            <article key={i} className="bento-card p-7 relative">
-              <Quote className="size-10 text-amber/80" strokeWidth={1.5} />
-              <p className="font-display italic text-lg mt-4 leading-snug text-balance">"{q.text}"</p>
-              <p className="font-mono-tech text-xs text-muted-foreground mt-6 uppercase">
-                {q.chapter} · p.{q.page}
-              </p>
-            </article>
-          ))}
+        <div className="mt-8">
+          <HorizontalQuoteWheel quotes={book.quotes} />
         </div>
       </section>
 
@@ -135,6 +144,7 @@ const Book = () => {
           <h2 className="font-display text-3xl font-bold">Raise a question</h2>
           <p className="text-sm text-muted-foreground mt-2">I read every message. Replies usually within 48 hours.</p>
           <form onSubmit={onSubmit} className="mt-6 space-y-4">
+            <input type="hidden" name="_subject" value="Book Question" />
             <Input required name="name" placeholder="Your name" className="bg-card-elevated border-white/10 h-12" />
             <Input required type="email" name="email" placeholder="Your email" className="bg-card-elevated border-white/10 h-12" />
             <Textarea required name="question" placeholder="Your question..." rows={4} className="bg-card-elevated border-white/10" />

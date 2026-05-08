@@ -1,0 +1,22 @@
+[
+  {
+    "id": "r1",
+    "title": "Latent geometry of player intent in roguelike level traversal",
+    "venue": "FDG 2025 · Conference on Foundations of Digital Games",
+    "year": 2025,
+    "abstract": "We trained a small transformer on 50K runs of an open-source roguelike to predict where players will go next. The model's attention maps cluster around procedural choke-points, suggesting level designers can audit difficulty by inspecting attention rather than playtesting.",
+    "pdfURL": "/papers/latent-intent.pdf",
+    "citations": 7,
+    "tags": ["ML", "Game AI", "HCI"]
+  },
+  {
+    "id": "r2",
+    "title": "Cheap PBR: a perceptual study on shader cost vs. preference",
+    "venue": "I3D 2024 · Symposium on Interactive 3D Graphics",
+    "year": 2024,
+    "abstract": "A user study (n=84) shows viewers cannot reliably distinguish a 6-tap PBR approximation from full Cook-Torrance below 90 fps thresholds — relevant for mobile and web rendering budgets.",
+    "pdfURL": "/papers/cheap-pbr.pdf",
+    "citations": 12,
+    "tags": ["Rendering", "Perception"]
+  }
+]

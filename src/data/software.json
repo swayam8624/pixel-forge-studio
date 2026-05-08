@@ -1,0 +1,40 @@
+[
+  {
+    "id": "s1",
+    "title": "Forge — render farm scheduler",
+    "problem": "Blender renders queued sequentially across 6 idle workstations.",
+    "built": "A lightweight scheduler that splits frames across nodes via SSH and a shared NFS mount.",
+    "result": "Reduced render time by 40% on a 3-min animation.",
+    "stack": ["Python", "FastAPI", "Redis", "Docker"],
+    "liveURL": "https://example.com/forge",
+    "repoURL": "https://github.com/example/forge",
+    "caseStudy": {
+      "architecture": "Single FastAPI orchestrator dispatches frame ranges; workers pull jobs from Redis, write outputs to NFS, then mark complete. Failed frames re-queue with backoff.",
+      "decisions": [
+        "Picked Redis over RabbitMQ — simpler ops, sufficient throughput.",
+        "Shared NFS over object storage — already in the studio LAN.",
+        "Skipped a UI; CLI + Slack bot covered 95% of operator needs."
+      ],
+      "nextTime": "Make the scheduler stateless and persist job state in Postgres so a restart doesn't drop in-flight frames."
+    }
+  },
+  {
+    "id": "s2",
+    "title": "Lumen — color-grade CLI",
+    "problem": "Re-grading 300 stills per shoot in DaVinci was manual and slow.",
+    "built": "A CLI that applies LUT chains and exposure curves to folders of RAWs.",
+    "result": "Used by 200+ photographers since launch (GitHub stars: 412).",
+    "stack": ["Rust", "image-rs", "Clap"],
+    "repoURL": "https://github.com/example/lumen"
+  },
+  {
+    "id": "s3",
+    "title": "Petalmap — open data viewer",
+    "problem": "City pollinator survey data lived in 14 untyped spreadsheets.",
+    "built": "A typed ETL + React map that lets researchers filter by species/season.",
+    "result": "Adopted by a regional conservation NGO; live in 3 cities.",
+    "stack": ["TypeScript", "DuckDB", "MapLibre", "React"],
+    "liveURL": "https://example.com/petalmap",
+    "repoURL": "https://github.com/example/petalmap"
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "title": "Hollow Cartography",
+  "subtitle": "A field guide to worlds that almost exist.",
+  "description": "Twelve interconnected stories about builders, dreamers, and the spaces between intention and outcome. Equal parts speculative fiction and quiet manifesto on craft.",
+  "cover": "/assets/book-cover.jpg",
+  "quotes": [
+    { "text": "Every world begins as a hesitation — a held breath between the page and the pen.", "chapter": "Chapter 1", "page": 11 },
+    { "text": "The map is not the territory. The map is the apology you owe the territory.", "chapter": "Chapter 4", "page": 73 },
+    { "text": "We don't build to be remembered. We build to remember ourselves.", "chapter": "Chapter 9", "page": 188 }
+  ],
+  "purchaseLinks": [
+    { "store": "Amazon", "url": "https://amazon.com", "primary": true },
+    { "store": "Gumroad", "url": "https://gumroad.com" },
+    { "store": "Bookshop", "url": "https://bookshop.org" }
+  ],
+  "excerpt": [
+    "The first map I ever drew was of a place I'd never been — a coastline I invented to give my grandfather somewhere to retire to in my head. I was nine. The compass rose was a sun with too many rays.",
+    "Years later I would learn that all maps are like this: half memory, half wish. Cartographers call the empty parts 'sleeping space.' I have always preferred the sleeping space to the cities."
+  ],
+  "faqItems": [
+    { "q": "Who is this book for?", "a": "Builders, designers, writers — anyone who has ever felt the gap between what they imagined and what they shipped." },
+    { "q": "Is this fiction or non-fiction?", "a": "Both. Twelve linked short stories with essayistic asides. Think Calvino meets a developer changelog." },
+    { "q": "How long is it?", "a": "248 pages. Designed to be finished in two long evenings or twelve short commutes." },
+    { "q": "Will there be a sequel?", "a": "I'm drafting a companion volume. Subscribe through any purchase link to be notified." }
+  ]
+}

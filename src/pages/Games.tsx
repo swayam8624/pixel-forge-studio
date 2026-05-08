@@ -93,7 +93,7 @@ const Games = () => {
                   <div className="aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black">
                     <iframe src={active.playURL} title={active.title} className="w-full h-full" />
                   </div>
-                  <div className="flex gap-2 mt-3">
+                  <div className="flex flex-wrap gap-2 mt-3">
                     <Button asChild className="bg-amber text-primary-foreground rounded-full">
                       <a href={active.playURL} target="_blank" rel="noreferrer"><Play className="size-4" /> Open Full Screen</a>
                     </Button>
@@ -139,7 +139,7 @@ const Games = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="flex gap-2 mt-3">
+                  <div className="flex flex-wrap gap-2 mt-3">
                     <Button asChild className="bg-amber text-primary-foreground rounded-full">
                       <a href={active.repoURL} target="_blank" rel="noreferrer"><Github className="size-4" /> Open GitHub</a>
                     </Button>

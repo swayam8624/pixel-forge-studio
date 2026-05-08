@@ -1,4 +1,4 @@
-import { SiBlender, SiUnity, SiThreedotjs, SiTypescript, SiPython, SiCplusplus, SiReact, SiNodedotjs, SiFigma, SiOpengl, SiRust, SiGithub, SiYoutube, SiInstagram, SiX, SiItchdotio } from "react-icons/si";
+import { SiBlender, SiUnity, SiThreedotjs, SiTypescript, SiPython, SiCplusplus, SiReact, SiNodedotjs, SiFigma, SiOpengl, SiRust, SiGithub, SiYoutube, SiInstagram, SiX, SiItchdotio, SiMedium, SiVulkan } from "react-icons/si";
 import { FaLinkedinIn } from "react-icons/fa6";
 import { TbBrandPython } from "react-icons/tb";
 import type { IconType } from "react-icons";
@@ -16,6 +16,8 @@ export const skillIcons: Record<string, IconType> = {
   GLSL: SiOpengl,
   Rust: SiRust,
   Pygame: TbBrandPython,
+  Vulkan: SiVulkan,
+  vulcan: SiVulkan,
 };
 
 export const brandIcons = {
@@ -25,4 +27,5 @@ export const brandIcons = {
   instagram: SiInstagram,
   x: SiX,
   itch: SiItchdotio,
+  medium: SiMedium,
 };

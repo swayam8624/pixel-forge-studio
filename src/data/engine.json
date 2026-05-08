@@ -1,0 +1,7 @@
+{
+  "name": "Aether Engine",
+  "pitch": "A focused 2D-first engine for narrative roguelikes — what Unity makes hard, this makes default.",
+  "notDoing": "It does not chase Unreal's rendering. It does small worlds beautifully.",
+  "architecture": "ECS core · custom Vulkan renderer · Lua scripting · hot-reload of assets and scripts under 200ms.",
+  "repoURL": "https://github.com/example/aether-engine"
+}

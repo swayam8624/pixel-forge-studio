@@ -1,0 +1,30 @@
+[
+  {
+    "id": "01",
+    "title": "Echo / Bust 04",
+    "description": "Stylized character study. Sculpted in Blender, retopologized for real-time. PBR materials with custom rim shader.",
+    "tags": ["Blender", "Character", "PBR"],
+    "thumbnail": "/assets/model-1.jpg",
+    "category": "Character",
+    "geometry": "bust",
+    "featured": true
+  },
+  {
+    "id": "02",
+    "title": "Liquid Obsidian",
+    "description": "Procedural metallic flow generated with geometry nodes. Part of an ongoing material exploration series.",
+    "tags": ["Blender", "Abstract", "Procedural"],
+    "thumbnail": "/assets/model-2.jpg",
+    "category": "Abstract",
+    "geometry": "torus"
+  },
+  {
+    "id": "03",
+    "title": "Hollow Sanctum",
+    "description": "Hand-modeled diorama. Ruined arches, mossy stone, ember-lit interior. Built for a short film concept.",
+    "tags": ["Blender", "Environment", "Diorama"],
+    "thumbnail": "/assets/model-3.jpg",
+    "category": "Environment",
+    "geometry": "ruins"
+  }
+]

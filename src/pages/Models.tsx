@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { X, Download, MessageCircle, ChevronDown } from "lucide-react";
 import { PageLayout } from "@/components/PageLayout";
 import { ModelViewer } from "@/components/ModelViewer";
+import { ContactModal } from "@/components/ContactModal";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -77,19 +78,20 @@ const Models = () => {
                     </span>
                   ))}
                 </div>
-                <div className="flex gap-2 mt-5" onClick={(e) => e.stopPropagation()}>
+                <div className="flex flex-wrap gap-2 mt-5" onClick={(e) => e.stopPropagation()}>
                   <a
                     href="#"
                     className="inline-flex items-center gap-1.5 px-3 h-8 rounded-full bg-amber text-primary-foreground text-xs font-medium hover:opacity-90"
                   >
                     <Download className="size-3.5" /> Download
                   </a>
-                  <a
-                    href={`mailto:${profile.email}?subject=Commission ${m.title}`}
-                    className="inline-flex items-center gap-1.5 px-3 h-8 rounded-full border border-white/15 text-xs font-medium hover:border-amber hover:text-amber transition-colors"
-                  >
-                    Commission Similar
-                  </a>
+                  <ContactModal subject={`Commission Inquiry: Similar to ${m.title}`} title="Commission a 3D Model">
+                    <button
+                      className="inline-flex items-center gap-1.5 px-3 h-8 rounded-full border border-white/15 text-xs font-medium hover:border-amber hover:text-amber transition-colors"
+                    >
+                      Commission Similar
+                    </button>
+                  </ContactModal>
                 </div>
               </div>
             </button>
@@ -112,19 +114,19 @@ const Models = () => {
                 </button>
               </div>
               <div className="mt-4">
-                <ModelViewer geometry={active.geometry} />
+                <ModelViewer geometry={active.geometry} objFile={active.objFile} />
               </div>
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mt-4">
                 <p className="text-sm text-muted-foreground max-w-2xl">{active.description}</p>
-                <div className="flex gap-2 flex-none">
+                <div className="flex flex-wrap gap-2 flex-none">
                   <Button className="bg-amber text-primary-foreground hover:opacity-90 rounded-full">
                     <Download className="size-4" /> Download
                   </Button>
-                  <Button asChild variant="outline" className="rounded-full border-white/15">
-                    <a href={`mailto:${profile.email}?subject=Commission ${active.title}`}>
-                      <MessageCircle className="size-4" /> Commission
-                    </a>
-                  </Button>
+                  <ContactModal subject={`Commission Inquiry: ${active.title}`} title="Commission a 3D Model">
+                    <Button variant="outline" className="rounded-full border-white/15">
+                      <MessageCircle className="size-4 mr-2" /> Commission
+                    </Button>
+                  </ContactModal>
                 </div>
               </div>
 

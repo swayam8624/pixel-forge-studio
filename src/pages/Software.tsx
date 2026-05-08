@@ -4,6 +4,7 @@ import { Github, ExternalLink, ChevronDown, MessageCircle, Cpu, GitBranch } from
 import { PageLayout } from "@/components/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ContactModal } from "@/components/ContactModal";
 import { software, engine, profile } from "@/data/site";
 import { cn } from "@/lib/utils";
 
@@ -141,9 +142,11 @@ const Software = () => {
             <p className="font-mono-tech text-xs uppercase text-muted-foreground">// freelance</p>
             <p className="font-display text-xl md:text-2xl font-semibold mt-1">Need something built? <span className="text-amber">Let's talk.</span></p>
           </div>
-          <Button asChild className="bg-foreground text-background hover:bg-foreground/90 rounded-full" size="lg">
-            <a href={`mailto:${profile.email}`}><MessageCircle className="size-4" /> Start a project</a>
-          </Button>
+          <ContactModal subject="Start a Project">
+            <Button className="bg-foreground text-background hover:bg-foreground/90 rounded-full" size="lg">
+              <MessageCircle className="size-4 mr-2" /> Start a project
+            </Button>
+          </ContactModal>
         </div>
       </section>
     </PageLayout>

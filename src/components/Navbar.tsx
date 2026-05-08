@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ContactModal } from "@/components/ContactModal";
 import { profile } from "@/data/site";
 import { cn } from "@/lib/utils";
 
@@ -43,9 +44,11 @@ export const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button asChild variant="default" size="sm" className="hidden md:inline-flex bg-foreground text-background hover:bg-foreground/90 rounded-full">
-            <a href={`mailto:${profile.email}`}>Let's Talk</a>
-          </Button>
+          <ContactModal subject="Portfolio Inquiry (Let's Talk)">
+            <Button variant="default" size="sm" className="hidden md:inline-flex bg-foreground text-background hover:bg-foreground/90 rounded-full">
+              Let's Talk
+            </Button>
+          </ContactModal>
           <button
             aria-label="Toggle menu"
             className="md:hidden p-2 rounded-lg border border-white/5"
@@ -75,9 +78,11 @@ export const Navbar = () => {
                 {l.label}
               </NavLink>
             ))}
-            <Button asChild className="mt-6 bg-foreground text-background hover:bg-foreground/90 rounded-full" size="lg">
-              <a href={`mailto:${profile.email}`}>Let's Talk</a>
-            </Button>
+            <ContactModal subject="Portfolio Inquiry (Let's Talk)">
+              <Button className="mt-6 bg-foreground text-background hover:bg-foreground/90 rounded-full" size="lg">
+                Let's Talk
+              </Button>
+            </ContactModal>
           </div>
         </div>
       )}
