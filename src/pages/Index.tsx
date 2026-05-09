@@ -8,6 +8,8 @@ import { ContactModal } from "@/components/ContactModal";
 import { Preloader } from "@/components/Preloader";
 import { WarningTape } from "@/components/WarningTape";
 import { VerticalQuoteWheel } from "@/components/VerticalQuoteWheel";
+import { MechanicalDial } from "@/components/MechanicalDial";
+import { LinkWindow } from "@/components/LinkWindow";
 import { profile, skills, projects, book, models, games } from "@/data/site";
 import { skillIcons, brandIcons } from "@/data/icons";
 import GithubHeatmap from "@/components/GithubHeatmap";
@@ -20,12 +22,15 @@ const Index = () => {
   useEffect(() => {
     if (!animationsReady) return;
     const interval = setInterval(() => {
-      setProjectIndex((prev) => (prev + 2 >= projects.length ? 0 : prev + 2));
-    }, 4000);
+      setProjectIndex((prev) => (prev + 1) % projects.length);
+    }, 3600);
     return () => clearInterval(interval);
   }, [animationsReady]);
 
-  const visibleProjects = projects.slice(projectIndex, projectIndex + 2);
+  const visibleProjects = Array.from({ length: Math.min(3, projects.length) }, (_, offset) => {
+    const index = (projectIndex + offset) % projects.length;
+    return { ...projects[index], dialIndex: index, offset };
+  });
 
   const staggerContainer = {
     hidden: { opacity: 0 },
@@ -39,8 +44,8 @@ const Index = () => {
   };
 
   const itemVariant = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+    hidden: { opacity: 0, x: "34vw", y: "-34vh", scale: 0.2, rotate: 0 },
+    visible: { opacity: 1, x: 0, y: 0, scale: 1, rotate: 0, transition: { type: "spring", stiffness: 95, damping: 16 } }
   };
 
   return (
@@ -154,9 +159,9 @@ const Index = () => {
             ].map((t, i) => {
               const Icon = t.icon as React.ComponentType<{ className?: string }>;
               return (
-                <a key={t.label} href={t.href} aria-label={t.label} className="icon-tile h-full">
+                <LinkWindow key={t.label} href={t.href} className="icon-tile h-full" >
                   <Icon className="size-7" />
-                </a>
+                </LinkWindow>
               );
             })}
           </motion.article>
@@ -216,16 +221,14 @@ const Index = () => {
                 const matchedKey = Object.keys(skillIcons).find(k => k.toLowerCase() === s.toLowerCase());
                 const Icon = matchedKey ? skillIcons[matchedKey] : Terminal;
                 return (
-                  <a 
+                  <LinkWindow 
                     key={s} 
                     href={`https://google.com/search?q=${encodeURIComponent(s + " official documentation")}&btnI`}
-                    target="_blank"
-                    rel="noreferrer"
                     className="group aspect-square rounded-2xl border border-white/5 bg-white/[0.02] backdrop-blur-sm flex flex-col items-center justify-center gap-2 text-[10px] font-mono-tech text-muted-foreground text-center p-2 hover:text-amber hover:border-amber/30 hover:bg-amber/5 transition-all duration-300 hover:scale-105 hover:-translate-y-1 hover:shadow-[0_10px_20px_-10px_rgba(251,191,36,0.3)] cursor-pointer"
                   >
                     <Icon className="size-5 md:size-6 transition-transform duration-300 group-hover:scale-110" />
                     <span className="hidden sm:block truncate w-full px-1">{s}</span>
-                  </a>
+                  </LinkWindow>
                 );
               })}
             </div>
@@ -239,36 +242,66 @@ const Index = () => {
           </motion.article>
 
           {/* Projects marquee */}
-          <motion.article variants={itemVariant} className="bento-card bento-card-hover col-span-12 lg:col-span-7 p-7 flex flex-col justify-between min-h-[260px] overflow-hidden">
-            <div className="-mx-7 overflow-hidden">
+          <motion.article variants={itemVariant} className="bento-card bento-card-hover col-span-12 lg:col-span-7 p-6 md:p-7 flex flex-col justify-between min-h-[300px] overflow-hidden">
+            <div className="-mx-7 -mt-2 overflow-hidden">
               <div className="flex gap-12 animate-marquee whitespace-nowrap font-display text-5xl font-bold text-white/[0.04]">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <span key={i}>SHIPPED · SHIPPED · SHIPPED ·</span>
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3 -mt-6 h-28 sm:h-32 lg:h-40 relative">
+            <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-4 mt-3 relative">
               <AnimatePresence mode="popLayout">
-                {visibleProjects.map(p => (
-                  <motion.div 
-                    key={p.id} 
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.5 }}
-                    className="relative rounded-xl overflow-hidden border border-white/5 aspect-video bg-card-elevated group"
-                  >
-                    <img src={p.thumb} alt={p.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
-                    
-                    {/* Glass blur overlay with text */}
-                    <div className="absolute inset-0 bg-background/60 backdrop-blur-md flex items-center justify-center transition-all duration-500 group-hover:bg-background/0 group-hover:backdrop-blur-none">
-                      <h4 className="font-display text-sm md:text-lg font-semibold text-center px-4 transition-opacity duration-500 group-hover:opacity-0">{p.title}</h4>
-                    </div>
-                  </motion.div>
-                ))}
+                <motion.div
+                  key={projectIndex}
+                  initial={{ opacity: 0, rotateY: -25, scale: 0.96 }}
+                  animate={{ opacity: 1, rotateY: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotateY: 25, scale: 0.96 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="grid min-h-48 grid-cols-1 gap-3 [perspective:900px] sm:grid-cols-[1.3fr_0.85fr_0.85fr]"
+                >
+                  {visibleProjects.map(p => (
+                    <motion.button
+                      type="button"
+                      key={`${p.id}-${p.offset}`}
+                      onClick={() => setProjectIndex(p.dialIndex)}
+                      whileHover={{ rotateY: p.offset === 0 ? -12 : p.offset === 2 ? 12 : 0, y: -6 }}
+                      className="relative min-h-44 overflow-hidden rounded-sm border border-white/5 bg-card-elevated text-left group"
+                    >
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(245,158,11,0.24),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.07),rgba(0,0,0,0.2))]" />
+                      <img
+                        src={p.thumb}
+                        alt={p.title}
+                        loading="lazy"
+                        onError={(event) => {
+                          event.currentTarget.style.display = "none";
+                        }}
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/35 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-4">
+                        <p className="font-mono-tech text-[9px] uppercase tracking-widest text-primary">build {p.dialIndex + 1}</p>
+                        <h4 className="mt-1 font-display text-lg font-semibold md:text-2xl">{p.title}</h4>
+                      </div>
+                    </motion.button>
+                  ))}
+                </motion.div>
               </AnimatePresence>
+              <div className="flex items-center justify-center gap-1 sm:flex-col">
+                {projects.map((p, i) => (
+                  <MechanicalDial
+                    key={p.id}
+                    label={`${i + 1}`}
+                    value={i === projectIndex ? 100 : 18}
+                    size="sm"
+                    active={i === projectIndex}
+                    onClick={() => setProjectIndex(i)}
+                    className="scale-90"
+                  />
+                ))}
+              </div>
             </div>
-            <div className="flex items-end justify-between mt-5">
+            <div className="mt-5 flex items-end justify-between">
               <div>
                 <p className="font-mono-tech text-xs text-muted-foreground uppercase">Software</p>
                 <h3 className="font-display text-2xl font-semibold mt-1">Recent builds</h3>
@@ -278,7 +311,6 @@ const Index = () => {
           </motion.article>
         </motion.div>
       </section>
-
       {/* Bottom Marquee */}
       <section className="w-full overflow-hidden border-y border-white/5 bg-[#050505] py-6 mt-8 md:mt-12">
         <div className="flex whitespace-nowrap">
@@ -300,4 +332,3 @@ const Index = () => {
 };
 
 export default Index;
-

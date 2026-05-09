@@ -10,6 +10,8 @@ import Book from "./pages/Book.tsx";
 import Software from "./pages/Software.tsx";
 import Research from "./pages/Research.tsx";
 import Resume from "./pages/Resume.tsx";
+import Blog from "./pages/Blog.tsx";
+import Gallery from "./pages/Gallery.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -28,6 +30,8 @@ const App = () => (
           <Route path="/research" element={<Research />} />
           <Route path="/book" element={<Book />} />
           <Route path="/resume" element={<Resume />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/gallery" element={<Gallery />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

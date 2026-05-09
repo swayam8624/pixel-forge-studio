@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { ScrambleText } from "@/components/ScrambleText";
 
 export function WarningTape({ text, subtitle }: { text: string; subtitle?: string }) {
   const topText = "SWAYAM SINGAL ✦ YUGEN KAIRO ✦ ";
@@ -16,7 +17,7 @@ export function WarningTape({ text, subtitle }: { text: string; subtitle?: strin
           >
             {Array.from({ length: 8 }).map((_, i) => (
               <span key={i} className="flex items-center gap-16">
-                {text} <span className="text-3xl text-primary/20">⚠</span>
+                <ScrambleText text={text} /> <span className="text-3xl text-primary/20">⚠</span>
               </span>
             ))}
           </motion.div>
@@ -36,7 +37,7 @@ export function WarningTape({ text, subtitle }: { text: string; subtitle?: strin
           >
             {Array.from({ length: 15 }).map((_, i) => (
               <span key={i} className="flex items-center gap-4">
-                {topText}
+                  <ScrambleText text={topText} />
               </span>
             ))}
           </motion.div>
@@ -51,7 +52,7 @@ export function WarningTape({ text, subtitle }: { text: string; subtitle?: strin
           >
             {Array.from({ length: 8 }).map((_, i) => (
               <span key={i} className="drop-shadow-sm flex items-center gap-16 opacity-90">
-                {text} <span className="text-4xl text-primary/60">⚠</span>
+                <ScrambleText text={text} /> <span className="text-4xl text-primary/60">⚠</span>
               </span>
             ))}
           </motion.div>
@@ -67,7 +68,7 @@ export function WarningTape({ text, subtitle }: { text: string; subtitle?: strin
             >
               {Array.from({ length: 10 }).map((_, i) => (
                 <span key={i} className="flex items-center gap-8">
-                  {subtitle} <span className="text-primary/60">✦</span>
+                  <ScrambleText text={subtitle} /> <span className="text-primary/60">✦</span>
                 </span>
               ))}
             </motion.div>

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { WarningTape } from "@/components/WarningTape";
 
 export function Preloader({ onComplete }: { onComplete?: () => void }) {
   const [show, setShow] = useState(false);
@@ -96,24 +97,59 @@ export function Preloader({ onComplete }: { onComplete?: () => void }) {
           {/* CRT scanline effect */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%] pointer-events-none z-10 opacity-40" />
           
-          {/* Vertical Broad Tape */}
-          <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-amber z-10 flex items-start overflow-hidden pointer-events-none">
-            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40' fill='%23000000' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E\")" }} />
-            <motion.div
-              animate={{ y: ["0%", "-50%"] }}
-              transition={{ repeat: Infinity, duration: 5, ease: "linear" }}
-              className="flex flex-col whitespace-nowrap text-background font-display font-bold text-3xl md:text-5xl tracking-tighter"
-              style={{ writingMode: "vertical-rl" }}
-            >
-              {Array.from({ length: 15 }).map((_, i) => (
-                <span key={i} className="my-8 flex items-center justify-center rotate-180">
-                  SYSTEM BOOT <span className="opacity-30 inline-block mx-4">✦</span>
-                </span>
-              ))}
-            </motion.div>
+          {/* Vertical title tape rail */}
+          <div className="absolute right-0 top-0 bottom-0 z-10 w-32 overflow-hidden border-l border-primary/20 bg-background/45 pointer-events-none md:w-52">
+            <div className="absolute inset-y-0 left-2 right-2 opacity-[0.04] bg-[repeating-linear-gradient(90deg,transparent,transparent_16px,hsl(var(--primary))_16px,hsl(var(--primary))_17px)]" />
+            <div className="absolute inset-0 z-10 flex justify-center">
+              <motion.div
+                animate={{ y: ["0%", "-50%"] }}
+                transition={{ repeat: Infinity, duration: 18, ease: "linear" }}
+                className="flex flex-col"
+              >
+                {Array.from({ length: 2 }).map((_, group) => (
+                  <div key={group} className="flex flex-col items-center">
+                    {Array.from({ length: 10 }).map((_, index) => (
+                      <div key={`${group}-${index}`} className="my-7 flex flex-col items-center gap-3">
+                        <div className="h-20 w-28 -skew-y-6 border-y-4 border-primary/35 bg-[#050505] shadow-[0_0_32px_rgba(245,158,11,0.18)] md:h-24 md:w-44">
+                          <div className="flex h-full items-center justify-center overflow-visible px-2">
+                            <span className="rotate-90 whitespace-nowrap bg-[#050505] px-3 font-display text-2xl font-black uppercase tracking-tighter text-primary md:text-4xl">
+                              SYSTEM BOOT
+                            </span>
+                          </div>
+                        </div>
+                        <span className="font-mono-tech text-[8px] uppercase tracking-[0.35em] text-primary/60">swayam.dev</span>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+
+          <div className="absolute bottom-8 left-6 z-20 hidden w-[420px] border border-primary/20 bg-background/50 p-4 backdrop-blur-md md:block">
+            <p className="mb-4 font-mono-tech text-[10px] uppercase tracking-widest text-primary">site graph / route boot progress</p>
+            <div className="flex items-end gap-3">
+              {["home", "3d", "games", "code", "paper", "book", "cv", "blog", "art"].map((page, index) => {
+                const active = logs.length > index;
+                return (
+                  <div key={page} className="flex flex-1 flex-col items-center gap-2">
+                    <motion.div
+                      className="w-full rounded-t-sm bg-primary/80"
+                      initial={{ height: 4, opacity: 0.2 }}
+                      animate={{ height: active ? 24 + index * 7 : 4, opacity: active ? 1 : 0.18 }}
+                      transition={{ type: "spring", stiffness: 150, damping: 18 }}
+                    />
+                    <span className="font-mono-tech text-[8px] uppercase tracking-widest text-muted-foreground">{page}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mt-4 h-px w-full bg-primary/20">
+              <motion.div className="h-px bg-primary" animate={{ width: `${Math.min(100, (logs.length / sequence.length) * 100)}%` }} />
+            </div>
           </div>
           
-          <div ref={containerRef} className="relative z-20 flex-1 overflow-y-auto overflow-x-hidden flex flex-col pb-10 whitespace-pre-wrap pr-20 md:pr-32">
+          <div ref={containerRef} className="relative z-20 flex-1 overflow-y-auto overflow-x-hidden flex flex-col pb-10 whitespace-pre-wrap pr-32 md:pr-56">
             {logs.map((log, i) => (
               <div key={i} className="mb-2 leading-relaxed text-xs md:text-sm">
                 <span className="text-muted-foreground mr-3 hidden sm:inline">sys@portfolio:~#</span>

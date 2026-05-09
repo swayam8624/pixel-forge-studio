@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Github, Linkedin, Mail, Gamepad2, GraduationCap } from "lucide-react";
 import { profile } from "@/data/site";
+import { LinkWindow } from "@/components/LinkWindow";
 
 const links = [
   { to: "/", label: "Home" },
@@ -29,11 +30,11 @@ export const Footer = () => (
         ))}
       </nav>
       <div className="flex gap-3">
-        <a href={profile.github} aria-label="GitHub" className="icon-tile size-10"><Github className="size-4" /></a>
-        <a href={profile.linkedin} aria-label="LinkedIn" className="icon-tile size-10"><Linkedin className="size-4" /></a>
-        <a href={profile.itch} aria-label="Itch.io" className="icon-tile size-10"><Gamepad2 className="size-4" /></a>
-        <a href={profile.researchgate} aria-label="ResearchGate" className="icon-tile size-10"><GraduationCap className="size-4" /></a>
-        <a href={`mailto:${profile.email}`} aria-label="Email" className="icon-tile size-10"><Mail className="size-4" /></a>
+        <LinkWindow href={profile.github} className="icon-tile size-10"><Github className="size-4" /></LinkWindow>
+        <LinkWindow href={profile.linkedin} className="icon-tile size-10"><Linkedin className="size-4" /></LinkWindow>
+        <LinkWindow href={profile.itch} className="icon-tile size-10"><Gamepad2 className="size-4" /></LinkWindow>
+        <LinkWindow href={profile.researchgate} className="icon-tile size-10"><GraduationCap className="size-4" /></LinkWindow>
+        <LinkWindow href={`mailto:${profile.email}`} className="icon-tile size-10"><Mail className="size-4" /></LinkWindow>
       </div>
       <p className="text-xs text-muted-foreground font-mono-tech">
         © 2026 · All rights reserved by {profile.name} · {profile.email}

@@ -151,7 +151,7 @@ const Book = () => {
             <AccordionItem
               key={i}
               value={`item-${i}`}
-              className="bento-card border-l-2 border-l-transparent data-[state=open]:border-l-amber px-6 py-1"
+              className="bento-card px-6 py-1 data-[state=open]:shadow-[0_0_30px_-18px_hsl(var(--primary))]"
             >
               <AccordionTrigger className="font-display text-lg hover:no-underline">{f.q}</AccordionTrigger>
               <AccordionContent className="text-muted-foreground leading-relaxed">{f.a}</AccordionContent>

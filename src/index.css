@@ -127,6 +127,7 @@
   .text-balance { text-wrap: balance; }
   .bg-card-elevated { background-color: hsl(var(--card-elevated)); }
   .text-amber { color: hsl(var(--primary)); }
+  .shadow-elevated { box-shadow: var(--shadow-elevated); }
   .scrollbar-hide::-webkit-scrollbar { display: none; }
   .scrollbar-hide { scrollbar-width: none; }
 

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import { PageLayout } from "@/components/PageLayout";
 import { profile, skills, projects, software, research } from "@/data/site";
@@ -19,6 +19,13 @@ const Resume = () => {
     damping: 30,
     restDelta: 0.001
   });
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setActiveSkill((current) => (current + 1) % skills.length);
+    }, 2200);
+    return () => window.clearInterval(interval);
+  }, []);
 
   return (
     <PageLayout videoPage="home">
@@ -47,49 +54,62 @@ const Resume = () => {
           </motion.div>
 
           {/* Radial Skill Slider */}
-          <div className="mt-24 relative size-[400px] md:size-[500px] flex items-center justify-center">
-            <div className="absolute inset-0 border-[1px] border-white/5 rounded-full" />
+          <div className="mt-24 relative size-[360px] md:size-[500px] flex items-center justify-center">
+            <motion.div
+              className="absolute inset-0 rounded-full border border-white/5"
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 34, ease: "linear" }}
+            >
+              <div className="absolute left-1/2 top-0 h-7 w-px -translate-x-1/2 bg-primary/60" />
+              <div className="absolute bottom-0 left-1/2 h-7 w-px -translate-x-1/2 bg-primary/20" />
+            </motion.div>
+            <motion.div
+              className="absolute inset-10 rounded-full border border-dashed border-primary/15"
+              animate={{ rotate: -360 }}
+              transition={{ repeat: Infinity, duration: 48, ease: "linear" }}
+            />
             <AnimatePresence mode="wait">
               <motion.div 
                 key={activeSkill}
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 1.2, opacity: 0 }}
-                className="z-10 text-center"
+                className="z-10 max-w-56 text-center"
               >
-                <h3 className="font-display text-4xl font-bold text-amber">{skills[activeSkill]}</h3>
+                <h3 className="font-display text-3xl font-bold text-amber md:text-5xl">{skills[activeSkill]}</h3>
                 <p className="mt-2 font-mono-tech text-xs text-muted-foreground uppercase tracking-widest">Core Competency</p>
               </motion.div>
             </AnimatePresence>
 
-            {skills.map((skill, i) => {
-              const angle = (i / skills.length) * (Math.PI * 2);
-              const x = Math.cos(angle) * 180;
-              const y = Math.sin(angle) * 180;
-              const mdX = Math.cos(angle) * 230;
-              const mdY = Math.sin(angle) * 230;
+            <motion.div
+              className="absolute inset-0"
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 58, ease: "linear" }}
+            >
+              {skills.map((skill, i) => {
+                const angle = (i / skills.length) * 360;
 
-              return (
-                <motion.button
-                  key={skill}
-                  onClick={() => setActiveSkill(i)}
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.9 }}
-                  initial={{ x: 0, y: 0, opacity: 0 }}
-                  animate={{ 
-                    x: window.innerWidth > 768 ? mdX : x, 
-                    y: window.innerWidth > 768 ? mdY : y, 
-                    opacity: 1 
-                  }}
-                  transition={{ delay: i * 0.05, type: "spring", stiffness: 200, damping: 20 }}
-                  className={cn(
-                    "absolute size-4 rounded-full transition-colors duration-500",
-                    activeSkill === i ? "bg-amber shadow-[0_0_20px_var(--primary)]" : "bg-white/20 hover:bg-white/40"
-                  )}
-                  title={skill}
-                />
-              );
-            })}
+                return (
+                  <motion.button
+                    key={skill}
+                    onClick={() => setActiveSkill(i)}
+                    whileHover={{ scale: 1.18 }}
+                    whileTap={{ scale: 0.92 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: i * 0.04 }}
+                    className={cn(
+                      "absolute left-1/2 top-1/2 size-6 rounded-full border transition-colors duration-500",
+                      activeSkill === i ? "border-primary bg-amber shadow-[0_0_24px_var(--primary)]" : "border-white/10 bg-white/15 hover:bg-white/35"
+                    )}
+                    style={{
+                      transform: `rotate(${angle}deg) translateX(clamp(150px, 22vw, 235px)) rotate(-${angle}deg)`,
+                    }}
+                    title={skill}
+                  />
+                );
+              })}
+            </motion.div>
           </div>
         </section>
 
@@ -189,7 +209,7 @@ const Resume = () => {
                 Currently taking on new projects for {profile.status.label.split("Available ")[1]}
               </p>
               <div className="mt-12 flex flex-col sm:flex-row justify-center gap-4">
-                <a href={`mailto:${profile.email}`} className="px-12 py-4 bg-amber text-background font-bold rounded-full hover:scale-105 transition-transform">
+                <a href={`mailto:${profile.email}`} className="px-12 py-4 bg-amber text-primary-foreground font-bold rounded-full hover:scale-105 transition-transform">
                   Email Me
                 </a>
                 <a href={profile.linkedin} className="px-12 py-4 border border-white/10 rounded-full hover:bg-white/5 transition-colors">

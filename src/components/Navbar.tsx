@@ -14,6 +14,8 @@ const links = [
   { to: "/research", label: "Research" },
   { to: "/book", label: "Book" },
   { to: "/resume", label: "Resume" },
+  { to: "/blog", label: "Blog" },
+  { to: "/gallery", label: "Gallery" },
 ];
 
 export const Navbar = () => {
@@ -39,7 +41,9 @@ export const Navbar = () => {
                 )
               }
             >
-              {l.label}
+              <span className="relative">
+                {l.label}
+              </span>
             </NavLink>
           ))}
         </div>
